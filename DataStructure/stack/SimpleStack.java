@@ -48,6 +48,14 @@ public class SimpleStack <T> implements Stack<T>{
 			return null;
 		}
 	}
+	public T top(){
+		if(!isEmpty()){
+			return stack[position];
+		}else{
+			System.out.println("empty stack!");
+			return null;
+		}
+	}
 	@Override
 	public boolean isEmpty(){
 		return position<=-1?true:false;

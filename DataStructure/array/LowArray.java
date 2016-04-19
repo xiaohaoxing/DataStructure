@@ -26,8 +26,6 @@ class LowArrayApp{
 	public static void main(String[] args){
 		LowArray arr;
 		arr=new LowArray(100);
-		int nelem=0;
-		int j;
 		arr.setElem(0, 77);
 	}
 }

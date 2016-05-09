@@ -4,14 +4,12 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 /**
- * 这个类适用的是无向图，所有地方对邻接矩阵采取的操作都是同时对对称点操作。
- * 如果采用有向图，两个点之间应该增加一个错误判断
+ * 有向图的数据结构
  * @author Star
  *
- * @param <T>
  */
-public class MyGraph <T>{
-	//	最大顶点数量
+public class MyDigraph<T> {
+//	最大顶点数量
 	public static int max_count=100;
 	//	顶点列表
 	public MyPoint<T>[] points;
@@ -21,7 +19,7 @@ public class MyGraph <T>{
 	private boolean[][] matrix;
 	//	遍历过程中用到的暂存搜索组
 	LinkedList<MyPoint<T>> list;
-	public MyGraph(){
+	public MyDigraph(){
 		points=new MyPoint[max_count];
 		//初始化的时候指针指向第一个元素之前
 		toPoint=-1;
@@ -49,37 +47,49 @@ public class MyGraph <T>{
 	 * 		查询不到返回-1
 	 */
 	public int getPointPos(MyPoint<T> p){
-		for(int i=0;i<100;i++){
+		for(int i=0;i<=toPoint;i++){
 			if(points[i].equals(p)){
 				return i;
 			}
 		}
 		return -1;
 	}
-	public boolean addEdge(MyPoint<T> a,MyPoint<T> b){
-		int pa=getPointPos(a);
-		int pb=getPointPos(b);
+	/**
+	 * 和无向图有区别
+	 * {@link MyGraph#addEdge(MyPoint, MyPoint)}
+	 * 有向图中边包含了起点和终点，每次只更新矩阵一个点
+	 * @param from		边的起始点
+	 * @param to		边的终止点
+	 * @return			更新结果
+	 */
+	public boolean addEdge(MyPoint<T> from,MyPoint<T> to){
+		int pa=getPointPos(from);
+		int pb=getPointPos(to);
+		if(pa==-1||pb==-1){
+			System.out.println("error at addEdge method!");
+			System.out.println(from.toString()+"->"+to.toString());
+			return false;
+		}
 		//原位置上是什么值
-		boolean exist=matrix[pa][pb]&&matrix[pb][pa];
+		boolean exist=matrix[pa][pb];
 		if(exist){
 			return false;
 		}else{
 			matrix[pa][pb]=true;
-			matrix[pb][pa]=true;
 			return true;
 		}
 	}
 	public boolean hasEdge(MyPoint<T> a,MyPoint<T> b){
 		int pa=getPointPos(a);
 		int pb=getPointPos(b);
-		return matrix[pa][pb]&&matrix[pb][pa];
+		return matrix[pa][pb];
 	}
 	public String toString(){
 		StringBuilder result=new StringBuilder();
-		for(int i=0;i<100;i++){
-			for(int j=0;j<i;j++){
-				if(matrix[i][j]&&matrix[j][i]){
-					result.append(points[i].toString()+"——"+points[j].toString()+'\n');
+		for(int i=0;i<toPoint;i++){
+			for(int j=0;j<toPoint;j++){
+				if(matrix[i][j]){
+					result.append(points[i].toString()+"—>"+points[j].toString()+'\n');
 				}
 			}
 		}
@@ -236,10 +246,8 @@ public class MyGraph <T>{
 		resetFlags();
 		return mst;
 	}
-	
-	
-	public static void main(String args[]){
-		MyGraph<String> graph=new MyGraph<String>();
+	public static void main(String[] args) {
+		MyDigraph<String> graph=new MyDigraph<String>();
 		MyPoint<String> wuhan=new MyPoint<String>("武汉");
 		MyPoint<String> chengdu=new MyPoint<String>("成都");
 		MyPoint<String> beijing=new MyPoint<String>("北京");
@@ -254,17 +262,7 @@ public class MyGraph <T>{
 		graph.addEdge(chengdu, shanghai);
 		graph.addEdge(chengdu, beijing);
 		graph.addEdge(beijing, shanghai);
-		System.out.println(graph.getMinimumSpanningTree(wuhan));
-		LinkedList<MyPoint<String>> list=graph.breadthFirstSearch(beijing);
-		System.out.println("北京可以达到的地点有：");
-		for(MyPoint<String> point:list){
-			System.out.println(point.toString());
-		}
-
-		System.out.println();
-		graph.printNeighbors(wuhan);
-		
-		System.out.println();
-		System.out.println("北京到上海距离："+graph.getMinDistance(beijing,shanghai));	
+		graph.printNeighbors(shanghai);
 	}
+
 }

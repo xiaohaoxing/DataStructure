@@ -246,6 +246,40 @@ public class MyDigraph<T> {
 		resetFlags();
 		return mst;
 	}
+	
+	public int getNoNextPointPos(){
+		for(int i=0;i<=toPoint;i++){
+			boolean hasNext=false;
+			for(int j=0;j<=toPoint;j++){
+				if(matrix[i][j]){
+					hasNext=true;
+				}
+			}
+			if(!hasNext){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * 图的拓扑排序
+	 * @return	拓扑结果
+	 */
+	public LinkedList<MyPoint<T>> topo(){
+		 int count=toPoint;
+		 while(count>0){
+			 int current=getNoNextPointPos();
+			 if(current==-1){
+				 //这整个图找不到没有后继节点的点，表示这个图一定存在环
+				 System.out.println("the graph has circle!");
+				 return null;
+			 }
+		 }
+		 // TODO
+		 return null;
+	}
+	
 	public static void main(String[] args) {
 		MyDigraph<String> graph=new MyDigraph<String>();
 		MyPoint<String> wuhan=new MyPoint<String>("武汉");

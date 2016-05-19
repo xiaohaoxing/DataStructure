@@ -1,5 +1,7 @@
 package tree;
 
+import java.util.Hashtable;
+
 public class BinNode<T>{
 	public T value;
 	public BinNode<T> leftchild;

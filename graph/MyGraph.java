@@ -1,4 +1,4 @@
-package graph;
+﻿package graph;
 
 import java.util.LinkedList;
 import java.util.Stack;
@@ -6,6 +6,7 @@ import java.util.Stack;
 /**
  * 这个类适用的是无向图，所有地方对邻接矩阵采取的操作都是同时对对称点操作。
  * 如果采用有向图，两个点之间应该增加一个错误判断
+ * 无向图
  * @author Star
  *
  * @param <T>
